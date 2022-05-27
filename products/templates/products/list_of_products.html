@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+    <style>
+        .products-container{
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+        }
+    </style>
+
+<div class="products-container">
+
+    <div>
+        <h3>Browse by category</h3>
+        <hr>
+
+        <div>
+            <a href="{% url 'products' %}">All</a>
+        </div>
+
+        {% for category in categories %}
+         <div>
+            <a href="{% url 'products' %}?q={{ category.name }}">{{ category.name }}</a>
+         </div>
+        {% endfor %}
+    </div>
+
+<h1>Products:</h1>
+    <h5>{{ products_count }} products available</h5>
+    <div>
+        <div>
+            {% for product in products %}
+                <div>
+                <h3><a href="{% url 'product-detail' product.id %}">{{ product.title }}</a></h3>
+
+                <small>Category:
+                    {% for category in product.category.all %}
+                        {{ category }}
+                    {% endfor %}
+                </small>
+                </div>
+                <!-- if admin -->
+                {% if user.is_staff %}
+                <a href="{% url 'update-product' product.id %}">Edit</a>
+                <a href="{% url 'delete-product' product.id %}">Delete</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

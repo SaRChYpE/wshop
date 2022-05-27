@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1>{{ product.title }}</h1>
+    <h2>Opis:<br>{{ product.description }}</h2>
+    <h3>Color: {{ product.color }}</h3>
+    <h3>{{ product.size }}</h3>
+
+    <h3>Category:
+        {% for category in product.category.all %}
+        {{ category }}
+    {% endfor %}
+    </h3>
+
+    <h3>Added: {{ product.created | date}}</h3>
+
+    <div class="comment-section">
+        <h3>Comments:</h3>
+        {% for comment in product_comments %}
+            <div>
+                {% if request.user == comment.user %}
+                <a href="{% url 'delete-comment' comment.id %}">Delete</a>
+                {% endif %}
+                <a href="{% url 'user-profile' user.id %}">@{{ comment.user }}</a>
+                    <a>{{ comment.created|timesince}} ago </a>
+                <p>{{ comment.body }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <div class="comment-form">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="text" name="body" placeholder="Write your comment..." />
+        </form>
+    </div>
+
+    {% else %}
+        <h3>Register to add a comment!</h3>
+    {% endif %}
+{% endblock content %}

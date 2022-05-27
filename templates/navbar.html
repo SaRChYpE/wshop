@@ -1,0 +1,21 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+<a href="/">
+    <h1>LOGO</h1>
+</a>
+<ul>
+  <li><a href="{% url 'home' %}">Home</a></li>
+  <li><a href="#">New products</a></li>
+  <li><a href="{% url 'products' %}">All stuff</a></li>
+  <li><a href="#">About</a></li>
+   <!-- if admin then: -->
+    {% if user.is_staff %}
+    <li><a href="{% url 'create-product' %}">Add product</a></li>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+        <p>Hello {{ request.user }}</p>
+    {% endif %}
+    <form method="GET" action ="{% url 'products' %}">
+        <input type="text" name="q" placeholder="Search products..."/>
+    </form>
+</ul> 
